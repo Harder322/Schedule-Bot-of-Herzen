@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: herzen-schedule-redis
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - ./dockerdata/redis:/data
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: herzen-schedule-bot
+    restart: always
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./dockerdata:/app/storage
+    ports:
+      - "5000:5000"
+    # Use the default command from Dockerfile or make debug configurable via environment variable
+    command: ["python", "run.py", "--debug"]
