@@ -39,7 +39,7 @@
 
 1. Клонируйте репозиторий:
    ```sh
-   git clone https://github.com/dant4ick/Herzen_Schedule_Bot.git && cd Herzen_Schedule_Bot/
+   git clone https://github.com/Harder322/Schedule-Bot-of-Herzen
    ```
 2. Создайте виртуальное окружение и активируйте:
    ```sh
@@ -122,10 +122,3 @@ docker run -d --name watchtower \
   -e WATCHTOWER_CLEANUP=true \
   containrrr/watchtower:latest --include-restarting --revive-stopped
 ```
-
----
-
-## 🚀 CI/CD
-
-- GitHub Actions workflow (`.github/workflows/docker-image.yml`) автоматически публикует образ при push в `master`.
-- Имена образов: `ghcr.io/dant4ick/herzen_schedule_bot:latest`, а также по SHA и git-тегам.
