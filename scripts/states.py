@@ -18,7 +18,3 @@ class Mailing(StatesGroup):
     
 class BroadcastAbort(StatesGroup):
     Abort = State()
-
-class StarsRefund(StatesGroup):
-    Refund = State()
-    Confirm = State()

@@ -93,8 +93,7 @@ async def set_mailing(call: types.CallbackQuery, state: FSMContext):
 async def cancel_mailing(msg: types.Message, state: FSMContext):
     await msg.answer("🔕 Хочешь отписаться от <b>рассылки</b> расписания?\n\n"
                      "Рассылка <b>может занять некоторое время</b>, обычно около получаса. "
-                     "Если ждать уже надоело и думаешь, что что-то пошло не так, можешь написать админу, "
-                     "ссылка есть в описании бота.\n"
+                     "Если ждать уже надоело и думаешь, что что-то пошло не так, обратись к разработчику.\n"
                      "Ты в любой момент сможешь как подписаться, так и отписаться снова.",
                      reply_markup=InlineKeyboardMarkup(inline_keyboard=[[keyboards.inline_bt_confirm], [keyboards.inline_bt_cancel]]))
     await state.set_state(states.Mailing.Unsubscribe)

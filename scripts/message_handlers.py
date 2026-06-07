@@ -141,18 +141,12 @@ async def send_date_schedule(
     if schedule is None:
         await bot.send_message(user_id, f"{header}\n\n😖 Упс, кажется, расписание не отвечает. Попробуй еще раз.\n"
                                            f"Если на сайте по кнопке ниже тоже ничего не работает, бот тут ни при чем. "
-                                           f"Если сайт показывает все исправно, напиши админу - ссылка в профиле бота.",
+                                           f"Если сайт показывает все исправно, напиши разработчику.",
                                   reply_markup=reply_markup)
         logging.error(f"failed to get schedule for user {user_id}")
         return
 
-    if random.randint(0, 100) < 5:
-        reminder = "<i>\n😉 Не забывай про возможность поддержать разработчика через /donate.</i>"
-    elif random.randint(0, 100) < 10:
-        reminder = "<i>\n🤖 Нравится бот? Расскажи про него другим:\n</i>" \
-                   r"https://t.me/schedule_herzen_bot"
-    else:
-        reminder = ""
+    reminder = ""
 
     if "недел" in period:
         if "эта" in period:

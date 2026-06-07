@@ -12,7 +12,7 @@ from scripts.bot import dp, db, bot
 
 from data.config import ADMIN_TELEGRAM_ID
 from scripts import keyboards
-from scripts.states import Broadcast, BroadcastAbort, StarsRefund
+from scripts.states import Broadcast, BroadcastAbort
 from scripts.message_handlers import broadcast_message
 
 
@@ -94,47 +94,3 @@ async def abort_broadcast(call: CallbackQuery, state: FSMContext):
     await call.answer("Рассылка будет отменена.")
 
 
-@dp.message(F.from_user.id == ADMIN_TELEGRAM_ID, F.text == keyboards.bt_admin_refund.text)
-async def refund_donation(msg: Message, state: FSMContext):
-    await msg.answer("Введите ID пользователя и ID платежа через пробел.",
-                     reply_markup=InlineKeyboardMarkup(inline_keyboard=[[keyboards.inline_bt_cancel]]))
-    await state.set_state(StarsRefund.Refund)
-
-
-@dp.message(F.from_user.id == ADMIN_TELEGRAM_ID, StarsRefund.Refund)
-async def process_refund(msg: Message, state: FSMContext):
-    user_id, payment_id = msg.text.split()
-    
-    await state.update_data(user_id=user_id, payment_id=payment_id)
-    
-    await msg.answer(f"Вы хотите вернуть платеж {payment_id} пользователю {user_id}. Подтвердите действие.",
-                     reply_markup=keyboards.inline_kb_confirm)
-    
-    await state.set_state(StarsRefund.Confirm)
-
-
-@dp.callback_query(F.from_user.id == ADMIN_TELEGRAM_ID, F.data == "confirm")
-async def confirm_refund(call: CallbackQuery, state: FSMContext):
-    data = await state.get_data()
-    user_id = data['user_id']
-    payment_id = data['payment_id']
-    
-    try:
-        success = await bot.refund_star_payment(
-            user_id=user_id,
-            telegram_payment_charge_id=payment_id,
-        )
-    except exceptions.TelegramBadRequest as e:
-        success = False
-        logging.error(f"Failed to refund payment {payment_id} for user {user_id}. Error: {e}")
-
-    if success:
-        await call.answer(f"Возврат для пользователя {user_id} по платежу {payment_id} успешно выполнен.",
-                          show_alert=True)
-    else:
-        await call.answer(f"Не удалось выполнить возврат для пользователя {user_id} по платежу {payment_id}.",
-                          show_alert=True)
-    
-    logging.info(f"Refund for user {user_id} with payment {payment_id} {'successful' if success else 'failed'}")
-    await state.clear()
-    await call.message.delete()
