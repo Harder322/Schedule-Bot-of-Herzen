@@ -1,22 +1,6 @@
 # Herzen Schedule Bot
 
-> Телеграм-бот для расписания занятий РГПУ им. Герцена
-
----
-
-## 🏁 Быстрый старт (Docker, публичный образ)
-
-1. Скопируйте и настройте переменные окружения:
-   ```sh
-   cp .env.example .env
-   # Отредактируйте значения
-   ```
-2. Запустите контейнер:
-   ```sh
-   sudo mkdir -p /var/lib/herzen_schedule_bot
-   sudo chown $USER /var/lib/herzen_schedule_bot
-   docker run --env-file .env -p 5000:5000 -v /var/lib/herzen_schedule_bot:/app/storage ghcr.io/dant4ick/herzen_schedule_bot:latest
-   ```
+> Дипломная работа: Разработка телеграм-бота для составления расписания ВУЗов
 
 ---
 
@@ -96,8 +80,6 @@
          WEBHOOK_HOST: ${WEBHOOK_HOST}
          WEBAPP_HOST: 0.0.0.0
          WEBAPP_PORT: ${WEBAPP_PORT:-5000}
-         DONATE_URL: ${DONATE_URL}
-         SUBSCRIBE_URL: ${SUBSCRIBE_URL}
          TIMEZONE: ${TIMEZONE:-Europe/Moscow}
          REDIS_URL: redis://redis:6379/0
        volumes:
